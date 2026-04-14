@@ -14,21 +14,7 @@ connectDB();
 
 // CORS: allow requests from the React frontend
 // In production, set CORS_ORIGIN to your actual Vercel domain
-const allowedOrigins = process.env.CORS_ORIGIN
-  ? process.env.CORS_ORIGIN.split(',').map(origin => origin.trim())
-  : ['http://localhost:5173', 'http://localhost:3000'];
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      // Allow requests with no origin (like curl or Postman) or matching origins
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
-    },
-  })
-);
+app.use(cors());
 
 // Parse incoming JSON request bodies
 app.use(express.json());
