@@ -1,0 +1,23 @@
+/* ============================================================
+   Workout grid layout + loading state
+   ============================================================ */
+
+.workout-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+/* Loading state container */
+.list-status {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 480px) {
+  .workout-grid {
+    grid-template-columns: 1fr;
+  }
+}

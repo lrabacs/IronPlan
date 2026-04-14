@@ -1,0 +1,195 @@
+/* ============================================================
+   IronPlan — Global Styles
+   Design system: dark theme, lime accent, clean fitness aesthetic
+   ============================================================ */
+
+/* --- CSS Custom Properties (Design Tokens) --- */
+:root {
+  /* Colours */
+  --bg-base:       #0d0d0d;
+  --bg-surface:    #161616;
+  --bg-card:       #1c1c1c;
+  --bg-card-hover: #222222;
+  --bg-input:      #242424;
+
+  --accent:        #c8ff00;   /* Electric lime */
+  --accent-dark:   #9ec800;
+  --accent-glow:   rgba(200, 255, 0, 0.15);
+
+  --text-primary:  #f0f0f0;
+  --text-secondary:#a0a0a0;
+  --text-muted:    #666666;
+
+  --border:        #2a2a2a;
+  --border-focus:  var(--accent);
+
+  --danger:        #ff4d4d;
+  --danger-dark:   #cc3c3c;
+  --success:       #3ddc84;
+  --warning:       #ffb547;
+
+  /* Badge colours */
+  --beginner-bg:   rgba(61, 220, 132, 0.15);
+  --beginner-text: #3ddc84;
+  --inter-bg:      rgba(255, 181, 71, 0.15);
+  --inter-text:    #ffb547;
+  --advanced-bg:   rgba(255, 77, 77, 0.15);
+  --advanced-text: #ff4d4d;
+
+  /* Spacing & Shape */
+  --radius-sm:  6px;
+  --radius-md:  12px;
+  --radius-lg:  18px;
+  --shadow:     0 4px 24px rgba(0, 0, 0, 0.5);
+  --shadow-sm:  0 2px 8px rgba(0, 0, 0, 0.35);
+
+  /* Typography */
+  --font:       'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-mono:  'JetBrains Mono', 'Fira Code', monospace;
+}
+
+/* --- Reset & Base --- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font);
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+  border: none;
+  outline: none;
+}
+
+input, select, textarea {
+  font-family: inherit;
+}
+
+/* --- Shared Button System --- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  transition: background 0.18s ease, transform 0.12s ease, opacity 0.18s ease;
+  white-space: nowrap;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn--primary {
+  background: var(--accent);
+  color: #000;
+}
+
+.btn--primary:hover {
+  background: var(--accent-dark);
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+}
+
+.btn--ghost:hover {
+  border-color: var(--text-secondary);
+  color: var(--text-primary);
+}
+
+.btn--edit {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 7px 16px;
+  font-size: 0.8rem;
+}
+
+.btn--edit:hover {
+  background: var(--accent-glow);
+}
+
+.btn--delete {
+  background: transparent;
+  color: var(--danger);
+  border: 1px solid var(--danger);
+  padding: 7px 16px;
+  font-size: 0.8rem;
+}
+
+.btn--delete:hover {
+  background: rgba(255, 77, 77, 0.1);
+}
+
+.btn--sm {
+  padding: 6px 14px;
+  font-size: 0.8rem;
+}
+
+/* --- Banner messages (success / error) --- */
+.banner {
+  padding: 12px 20px;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 20px;
+  animation: slideDown 0.25s ease;
+}
+
+.banner--success {
+  background: rgba(61, 220, 132, 0.12);
+  border: 1px solid var(--success);
+  color: var(--success);
+}
+
+.banner--error {
+  background: rgba(255, 77, 77, 0.1);
+  border: 1px solid var(--danger);
+  color: var(--danger);
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Spinner --- */
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  margin: 0 auto 12px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

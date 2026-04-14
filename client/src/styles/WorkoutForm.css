@@ -1,0 +1,157 @@
+/* ============================================================
+   Workout Form card
+   ============================================================ */
+
+.workout-form-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px 32px;
+  transition: border-color 0.2s ease;
+}
+
+/* When in edit mode, highlight the form with an accent border */
+.workout-form-card.editing {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent-glow), var(--shadow);
+}
+
+.form-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.form-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* Validation error shown at top of form */
+.form-error {
+  color: var(--danger);
+  font-size: 0.875rem;
+  margin-bottom: 16px;
+  padding: 10px 14px;
+  background: rgba(255, 77, 77, 0.08);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--danger);
+}
+
+/* --- Layout rows --- */
+.workout-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* Narrow row for sets/reps — cap at 400px total */
+.form-row--short {
+  grid-template-columns: 1fr 1fr;
+  max-width: 320px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group--full {
+  grid-column: 1 / -1;
+}
+
+/* Labels */
+.form-group label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.optional {
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+
+/* Inputs, selects, textareas */
+.workout-form input,
+.workout-form select,
+.workout-form textarea {
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  padding: 10px 14px;
+  font-size: 0.9rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  width: 100%;
+}
+
+.workout-form input::placeholder,
+.workout-form textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.workout-form input:focus,
+.workout-form select:focus,
+.workout-form textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+/* Style the select arrow */
+.workout-form select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+}
+
+.workout-form textarea {
+  resize: vertical;
+  min-height: 72px;
+}
+
+/* Number inputs — hide spinners for cleaner look */
+.workout-form input[type='number']::-webkit-inner-spin-button,
+.workout-form input[type='number']::-webkit-outer-spin-button {
+  opacity: 0.4;
+}
+
+/* Form action buttons */
+.form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .workout-form-card {
+    padding: 20px 18px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .form-row--short {
+    max-width: 100%;
+    grid-template-columns: 1fr 1fr;
+  }
+}
