@@ -220,4 +220,55 @@ describe('Workout API', () => {
             message: 'Workout not found'
         });
     });
+
+    test('POST /api/workouts returns 400 when required data is missing', async () => {
+        const response = await request(app)
+            .post('/api/workouts')
+            .send({
+                day: 'Monday',
+                muscleGroup: 'Legs',
+                exercises: 'Squat',
+                sets: 3,
+                reps: 8,
+                difficulty: 'Intermediate'
+            });
+
+        expect(response.statusCode).toBe(400);
+    });
+
+    test('POST /api/workouts returns 400 for an invalid difficulty', async () => {
+        const response = await request(app)
+            .post('/api/workouts')
+            .send({
+                title: 'Bad Workout',
+                day: 'Monday',
+                muscleGroup: 'Legs',
+                exercises: 'Squat',
+                sets: 3,
+                reps: 8,
+                difficulty: 'Impossible'
+            });
+
+        expect(response.statusCode).toBe(400);
+    });
+
+    test('PUT /api/workouts/:id returns 400 for invalid workout data', async () => {
+        const workout = await Workout.create({
+            title: 'Valid Workout',
+            day: 'Tuesday',
+            muscleGroup: 'Chest',
+            exercises: 'Bench Press',
+            sets: 3,
+            reps: 10,
+            difficulty: 'Beginner'
+        });
+
+        const response = await request(app)
+            .put(`/api/workouts/${workout._id}`)
+            .send({
+                sets: 0
+            });
+
+        expect(response.statusCode).toBe(400);
+    });
 });
