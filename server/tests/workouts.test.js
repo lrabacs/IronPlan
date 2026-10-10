@@ -144,4 +144,80 @@ describe('Workout API', () => {
         const deletedWorkout = await Workout.findById(workout._id);
         expect(deletedWorkout).toBeNull();
     });
+
+    test('GET /api/workouts/:id returns 400 for an invalid ID', async () => {
+        const response = await request(app)
+            .get('/api/workouts/not-a-real-id');
+
+        expect(response.statusCode).toBe(400);
+        expect(response.body).toEqual({
+            message: 'Invalid workout ID'
+        });
+    });
+
+    test('PUT /api/workouts/:id returns 400 for an invalid ID', async () => {
+        const response = await request(app)
+            .put('/api/workouts/not-a-real-id')
+            .send({});
+
+        expect(response.statusCode).toBe(400);
+        expect(response.body).toEqual({
+            message: 'Invalid workout ID'
+        });
+    });
+
+    test('DELETE /api/workouts/:id returns 400 for an invalid ID', async () => {
+        const response = await request(app)
+            .delete('/api/workouts/not-a-real-id');
+
+        expect(response.statusCode).toBe(400);
+        expect(response.body).toEqual({
+            message: 'Invalid workout ID'
+        });
+    });
+
+    test('GET /api/workouts/:id returns 404 for a missing workout', async () => {
+        const missingId = new mongoose.Types.ObjectId();
+
+        const response = await request(app)
+            .get(`/api/workouts/${missingId}`);
+
+        expect(response.statusCode).toBe(404);
+        expect(response.body).toEqual({
+            message: 'Workout not found'
+        });
+    });
+
+    test('PUT /api/workouts/:id returns 404 for a missing workout', async () => {
+        const missingId = new mongoose.Types.ObjectId();
+
+        const response = await request(app)
+            .put(`/api/workouts/${missingId}`)
+            .send({
+                title: 'Missing Workout',
+                day: 'Saturday',
+                muscleGroup: 'Legs',
+                exercises: 'Squat',
+                sets: 3,
+                reps: 8,
+                difficulty: 'Intermediate'
+            });
+
+        expect(response.statusCode).toBe(404);
+        expect(response.body).toEqual({
+            message: 'Workout not found'
+        });
+    });
+
+    test('DELETE /api/workouts/:id returns 404 for a missing workout', async () => {
+        const missingId = new mongoose.Types.ObjectId();
+
+        const response = await request(app)
+            .delete(`/api/workouts/${missingId}`);
+
+        expect(response.statusCode).toBe(404);
+        expect(response.body).toEqual({
+            message: 'Workout not found'
+        });
+    });
 });
