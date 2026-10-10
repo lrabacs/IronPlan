@@ -3,36 +3,53 @@
 // Production: your Render URL/api
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 
-// Helper to handle response errors uniformly
+// Handle HTTP error responses uniformly
 async function handleResponse(res) {
   if (!res.ok) {
-    const err = await res.json().catch(() => ({ message: res.statusText }));
+    const err = await res.json().catch(() => ({
+      message: res.statusText,
+    }));
+
     throw new Error(err.message || 'Something went wrong');
   }
+
   return res.json();
 }
 
+// Handle both network failures and HTTP responses
+async function apiRequest(url, options) {
+  let response;
+
+  try {
+    response = await fetch(url, options);
+  } catch (error) {
+    throw new Error('Could not connect to the server. Is it running?');
+  }
+
+  return handleResponse(response);
+}
+
 export const getAllWorkouts = () =>
-  fetch(`${BASE_URL}/workouts`).then(handleResponse);
+  apiRequest(`${BASE_URL}/workouts`);
 
 export const getWorkoutById = (id) =>
-  fetch(`${BASE_URL}/workouts/${id}`).then(handleResponse);
+  apiRequest(`${BASE_URL}/workouts/${id}`);
 
 export const createWorkout = (data) =>
-  fetch(`${BASE_URL}/workouts`, {
+  apiRequest(`${BASE_URL}/workouts`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
-  }).then(handleResponse);
+  });
 
 export const updateWorkout = (id, data) =>
-  fetch(`${BASE_URL}/workouts/${id}`, {
+  apiRequest(`${BASE_URL}/workouts/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
-  }).then(handleResponse);
+  });
 
 export const deleteWorkout = (id) =>
-  fetch(`${BASE_URL}/workouts/${id}`, {
+  apiRequest(`${BASE_URL}/workouts/${id}`, {
     method: 'DELETE',
-  }).then(handleResponse);
+  });

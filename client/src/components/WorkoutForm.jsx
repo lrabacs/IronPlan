@@ -19,6 +19,7 @@ const EMPTY_FORM = {
 function WorkoutForm({ onSave, editingWorkout, onCancelEdit }) {
   const [form, setForm] = useState(EMPTY_FORM);
   const [formError, setFormError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // When editingWorkout changes, fill the form with its data
   useEffect(() => {
@@ -56,21 +57,31 @@ function WorkoutForm({ onSave, editingWorkout, onCancelEdit }) {
     return null;
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
+
     const err = validate();
+
     if (err) {
       setFormError(err);
       return;
     }
+
     setFormError('');
-    onSave({
-      ...form,
-      sets: Number(form.sets),
-      reps: Number(form.reps),
-    });
-    if (!editingWorkout) {
-      setForm(EMPTY_FORM); // Clear form after create
+    setIsSubmitting(true);
+
+    try {
+      const success = await onSave({
+        ...form,
+        sets: Number(form.sets),
+        reps: Number(form.reps),
+      });
+
+      if (success && !editingWorkout) {
+        setForm(EMPTY_FORM);
+      }
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
@@ -193,8 +204,16 @@ function WorkoutForm({ onSave, editingWorkout, onCancelEdit }) {
         </div>
 
         <div className="form-actions">
-          <button type="submit" className="btn btn--primary">
-            {isEditing ? 'Save Changes' : 'Add Workout'}
+          <button
+            type="submit"
+            className="btn btn--primary"
+            disabled={isSubmitting}
+          >
+            {isSubmitting
+              ? 'Saving...'
+              : isEditing
+                ? 'Save Changes'
+                : 'Add Workout'}
           </button>
           {isEditing && (
             <button type="button" className="btn btn--ghost" onClick={onCancelEdit}>

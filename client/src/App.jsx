@@ -43,21 +43,29 @@ function App() {
   // --- Create or Update ---
   async function handleSave(formData) {
     setError(null);
+
     try {
       if (editingWorkout) {
         const updated = await updateWorkout(editingWorkout._id, formData);
+
         setWorkouts((prev) =>
           prev.map((w) => (w._id === updated._id ? updated : w))
         );
+
         showSuccess('Workout updated!');
         setEditingWorkout(null);
       } else {
         const created = await createWorkout(formData);
+
         setWorkouts((prev) => [created, ...prev]);
+
         showSuccess('Workout added!');
       }
+
+      return true;
     } catch (err) {
       setError(err.message || 'Failed to save workout.');
+      return false;
     }
   }
 
