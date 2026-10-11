@@ -20,18 +20,42 @@ afterAll(async () => {
     await mongoServer.stop();
 });
 
+function makeWorkout(overrides = {}) {
+    return {
+        title: 'Leg Day',
+        date: '2026-10-11',
+        startTime: '17:30',
+        durationMinutes: 75,
+        difficulty: 8,
+        muscleGroups: ['Legs'],
+        exercises: [
+            {
+                name: 'Squat',
+                sets: [
+                    {
+                        reps: 8,
+                        weight: 225,
+                        weightUnit: 'lb'
+                    },
+                    {
+                        reps: 6,
+                        weight: 245,
+                        weightUnit: 'lb'
+                    }
+                ],
+                restTime: 2,
+                restUnit: 'minutes',
+                notes: 'Depth felt good'
+            }
+        ],
+        notes: 'Test workout',
+        ...overrides
+    };
+}
+
 describe('Workout API', () => {
     test('POST /api/workouts creates a workout', async () => {
-        const workout = {
-            title: 'Leg Day',
-            day: 'Monday',
-            muscleGroup: 'Legs',
-            exercises: 'Squat, RDL',
-            sets: 4,
-            reps: 8,
-            notes: 'Test workout',
-            difficulty: 'Intermediate'
-        };
+        const workout = makeWorkout();
 
         const response = await request(app)
             .post('/api/workouts')
@@ -39,6 +63,13 @@ describe('Workout API', () => {
 
         expect(response.statusCode).toBe(201);
         expect(response.body.title).toBe('Leg Day');
+        expect(response.body.date).toBe('2026-10-11');
+        expect(response.body.difficulty).toBe(8);
+        expect(response.body.muscleGroups).toEqual(['Legs']);
+        expect(response.body.exercises).toHaveLength(1);
+        expect(response.body.exercises[0].name).toBe('Squat');
+        expect(response.body.exercises[0].sets).toHaveLength(2);
+        expect(response.body.exercises[0].sets[0].weight).toBe(225);
         expect(response.body._id).toBeDefined();
 
         const count = await Workout.countDocuments();
@@ -46,25 +77,34 @@ describe('Workout API', () => {
     });
 
     test('GET /api/workouts returns all workouts', async () => {
-        await Workout.create({
-            title: 'Leg Day',
-            day: 'Monday',
-            muscleGroup: 'Legs',
-            exercises: 'Squat, RDL',
-            sets: 4,
-            reps: 8,
-            difficulty: 'Intermediate'
-        });
+        await Workout.create(makeWorkout());
 
-        await Workout.create({
-            title: 'Upper Body',
-            day: 'Tuesday',
-            muscleGroup: 'Chest',
-            exercises: 'Bench Press, Push Ups',
-            sets: 3,
-            reps: 10,
-            difficulty: 'Beginner'
-        });
+        await Workout.create(makeWorkout({
+            title: 'Push Day',
+            date: '2026-10-12',
+            difficulty: 6,
+            muscleGroups: ['Chest', 'Shoulders', 'Triceps'],
+            exercises: [
+                {
+                    name: 'Bench Press',
+                    sets: [
+                        {
+                            reps: 10,
+                            weight: 135,
+                            weightUnit: 'lb'
+                        },
+                        {
+                            reps: 8,
+                            weight: 155,
+                            weightUnit: 'lb'
+                        }
+                    ],
+                    restTime: 90,
+                    restUnit: 'seconds',
+                    notes: ''
+                }
+            ]
+        }));
 
         const response = await request(app).get('/api/workouts');
 
@@ -73,65 +113,87 @@ describe('Workout API', () => {
     });
 
     test('GET /api/workouts/:id returns one workout', async () => {
-        const workout = await Workout.create({
+        const workout = await Workout.create(makeWorkout({
             title: 'Speed Day',
-            day: 'Wednesday',
-            muscleGroup: 'Legs',
-            exercises: 'Sprints, Lunges',
-            sets: 5,
-            reps: 6,
-            difficulty: 'Advanced'
-        });
+            date: '2026-10-13',
+            difficulty: 9,
+            muscleGroups: ['Legs', 'Plyometrics'],
+            exercises: [
+                {
+                    name: 'Box Jumps',
+                    sets: [
+                        {
+                            reps: 5,
+                            weightUnit: 'lb'
+                        },
+                        {
+                            reps: 5,
+                            weightUnit: 'lb'
+                        }
+                    ],
+                    restTime: 2,
+                    restUnit: 'minutes',
+                    notes: 'Focus on maximum height'
+                }
+            ]
+        }));
 
         const response = await request(app)
             .get(`/api/workouts/${workout._id}`);
 
         expect(response.statusCode).toBe(200);
         expect(response.body.title).toBe('Speed Day');
+        expect(response.body.muscleGroups).toContain('Plyometrics');
         expect(response.body._id).toBe(workout._id.toString());
     });
 
     test('PUT /api/workouts/:id updates a workout', async () => {
-        const workout = await Workout.create({
-            title: 'Old Workout',
-            day: 'Thursday',
-            muscleGroup: 'Back',
-            exercises: 'Rows',
-            sets: 3,
-            reps: 10,
-            difficulty: 'Beginner'
-        });
+        const workout = await Workout.create(makeWorkout({
+            title: 'Old Workout'
+        }));
 
         const response = await request(app)
             .put(`/api/workouts/${workout._id}`)
-            .send({
+            .send(makeWorkout({
                 title: 'Updated Workout',
-                day: 'Thursday',
-                muscleGroup: 'Back',
-                exercises: 'Rows, Pull Ups',
-                sets: 4,
-                reps: 8,
-                difficulty: 'Intermediate'
-            });
+                difficulty: 9,
+                muscleGroups: ['Back', 'Biceps'],
+                exercises: [
+                    {
+                        name: 'Barbell Row',
+                        sets: [
+                            {
+                                reps: 8,
+                                weight: 155,
+                                weightUnit: 'lb'
+                            },
+                            {
+                                reps: 7,
+                                weight: 165,
+                                weightUnit: 'lb'
+                            }
+                        ],
+                        restTime: 2,
+                        restUnit: 'minutes',
+                        notes: ''
+                    }
+                ]
+            }));
 
         expect(response.statusCode).toBe(200);
         expect(response.body.title).toBe('Updated Workout');
-        expect(response.body.sets).toBe(4);
+        expect(response.body.difficulty).toBe(9);
+        expect(response.body.exercises[0].name).toBe('Barbell Row');
+        expect(response.body.exercises[0].sets[1].weight).toBe(165);
 
         const updatedWorkout = await Workout.findById(workout._id);
         expect(updatedWorkout.title).toBe('Updated Workout');
     });
 
     test('DELETE /api/workouts/:id deletes a workout', async () => {
-        const workout = await Workout.create({
-            title: 'Delete Me',
-            day: 'Friday',
-            muscleGroup: 'Arms',
-            exercises: 'Curls',
-            sets: 3,
-            reps: 12,
-            difficulty: 'Beginner'
-        });
+        const workout = await Workout.create(makeWorkout({
+            title: 'Delete Me'
+        }));
 
         const response = await request(app)
             .delete(`/api/workouts/${workout._id}`);
@@ -193,15 +255,7 @@ describe('Workout API', () => {
 
         const response = await request(app)
             .put(`/api/workouts/${missingId}`)
-            .send({
-                title: 'Missing Workout',
-                day: 'Saturday',
-                muscleGroup: 'Legs',
-                exercises: 'Squat',
-                sets: 3,
-                reps: 8,
-                difficulty: 'Intermediate'
-            });
+            .send(makeWorkout());
 
         expect(response.statusCode).toBe(404);
         expect(response.body).toEqual({
@@ -222,16 +276,12 @@ describe('Workout API', () => {
     });
 
     test('POST /api/workouts returns 400 when required data is missing', async () => {
+        const workout = makeWorkout();
+        delete workout.title;
+
         const response = await request(app)
             .post('/api/workouts')
-            .send({
-                day: 'Monday',
-                muscleGroup: 'Legs',
-                exercises: 'Squat',
-                sets: 3,
-                reps: 8,
-                difficulty: 'Intermediate'
-            });
+            .send(workout);
 
         expect(response.statusCode).toBe(400);
     });
@@ -239,34 +289,33 @@ describe('Workout API', () => {
     test('POST /api/workouts returns 400 for an invalid difficulty', async () => {
         const response = await request(app)
             .post('/api/workouts')
-            .send({
-                title: 'Bad Workout',
-                day: 'Monday',
-                muscleGroup: 'Legs',
-                exercises: 'Squat',
-                sets: 3,
-                reps: 8,
-                difficulty: 'Impossible'
-            });
+            .send(makeWorkout({
+                difficulty: 11
+            }));
 
         expect(response.statusCode).toBe(400);
     });
 
     test('PUT /api/workouts/:id returns 400 for invalid workout data', async () => {
-        const workout = await Workout.create({
-            title: 'Valid Workout',
-            day: 'Tuesday',
-            muscleGroup: 'Chest',
-            exercises: 'Bench Press',
-            sets: 3,
-            reps: 10,
-            difficulty: 'Beginner'
-        });
+        const workout = await Workout.create(makeWorkout({
+            title: 'Valid Workout'
+        }));
 
         const response = await request(app)
             .put(`/api/workouts/${workout._id}`)
             .send({
-                sets: 0
+                exercises: [
+                    {
+                        name: 'Bench Press',
+                        sets: [
+                            {
+                                reps: 0,
+                                weight: 185,
+                                weightUnit: 'lb'
+                            }
+                        ]
+                    }
+                ]
             });
 
         expect(response.statusCode).toBe(400);
