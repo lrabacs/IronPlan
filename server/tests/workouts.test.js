@@ -320,4 +320,22 @@ describe('Workout API', () => {
 
         expect(response.statusCode).toBe(400);
     });
+
+    test('GET /api/workouts returns workouts newest date first', async () => {
+        await Workout.create(makeWorkout({
+            title: 'Older Workout',
+            date: '2026-10-01'
+        }));
+
+        await Workout.create(makeWorkout({
+            title: 'Newer Workout',
+            date: '2026-10-15'
+        }));
+
+        const response = await request(app).get('/api/workouts');
+
+        expect(response.statusCode).toBe(200);
+        expect(response.body[0].title).toBe('Newer Workout');
+        expect(response.body[1].title).toBe('Older Workout');
+    }); 
 });

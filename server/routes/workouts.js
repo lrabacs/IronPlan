@@ -10,7 +10,11 @@ function isValidObjectId(id) {
 // GET /api/workouts — fetch all workouts, newest first
 router.get('/', async (req, res) => {
   try {
-    const workouts = await Workout.find().sort({ createdAt: -1 });
+    const workouts = await Workout.find().sort({
+      date: -1,
+      startTime: -1,
+      createdAt: -1
+    });
     res.json(workouts);
   } catch (error) {
     res.status(500).json({ message: 'Failed to fetch workouts' });
