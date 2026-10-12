@@ -2,10 +2,42 @@
    Workout History
    ============================================================ */
 
-.workout-grid {
+.workout-history {
+  display: flex;
+  flex-direction: column;
+  gap: 34px;
+}
+
+.workout-month {
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+
+.workout-month-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.workout-month-header h3 {
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-weight: 750;
+}
+
+.workout-month-header span {
+  color: var(--text-muted);
+  font-size: 0.76rem;
+}
+
+.workout-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .list-status {
