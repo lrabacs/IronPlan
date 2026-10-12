@@ -288,6 +288,11 @@
   border-bottom: 1px solid transparent;
 }
 
+.exercise-name-preview--empty {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
 .exercise-collapse-toggle {
   display: flex;
   flex: 1;

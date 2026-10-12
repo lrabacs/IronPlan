@@ -68,14 +68,8 @@ function ExerciseEditor({
               Exercise {exerciseIndex + 1}
             </span>
 
-            <strong
-              className={
-                exercise.name.trim()
-                  ? 'exercise-name-preview'
-                  : 'exercise-name-preview exercise-name-preview--empty'
-              }
-            >
-              {exercise.name.trim() || ''}
+            <strong className="exercise-name-preview">
+              {exercise.name.trim()}
             </strong>
           </div>
 

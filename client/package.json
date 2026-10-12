@@ -1,7 +1,7 @@
 {
   "name": "ironplan-client",
   "version": "1.0.0",
-  "description": "IronPlan Workout Planner — React frontend",
+  "description": "IronPlan Workout Tracker — React frontend",
   "type": "module",
   "scripts": {
     "dev": "vite",

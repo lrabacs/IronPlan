@@ -32,9 +32,6 @@ async function apiRequest(url, options) {
 export const getAllWorkouts = () =>
   apiRequest(`${BASE_URL}/workouts`);
 
-export const getWorkoutById = (id) =>
-  apiRequest(`${BASE_URL}/workouts/${id}`);
-
 export const createWorkout = (data) =>
   apiRequest(`${BASE_URL}/workouts`, {
     method: 'POST',

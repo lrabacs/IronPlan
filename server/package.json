@@ -1,7 +1,7 @@
 {
   "name": "ironplan-server",
   "version": "1.0.0",
-  "description": "IronPlan Workout Planner — Express/MongoDB backend",
+  "description": "IronPlan Workout Tracker — Express/MongoDB backend",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
