@@ -337,5 +337,5 @@ describe('Workout API', () => {
         expect(response.statusCode).toBe(200);
         expect(response.body[0].title).toBe('Newer Workout');
         expect(response.body[1].title).toBe('Older Workout');
-    }); 
+    });
 });

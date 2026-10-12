@@ -82,7 +82,7 @@ const workoutSchema = new mongoose.Schema(
         /^([01]\d|2[0-3]):[0-5]\d$/,
         'Start time must use HH:MM format'
       ],
-      default: ''
+      default: null
     },
     durationMinutes: {
       type: Number,
