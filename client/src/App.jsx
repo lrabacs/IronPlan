@@ -12,6 +12,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [successMsg, setSuccessMsg] = useState('');
+  const [formOpen, setFormOpen] = useState(false);
 
   // --- Edit state ---
   // When editingWorkout is set, the form switches to edit mode
@@ -62,6 +63,7 @@ function App() {
         showSuccess('Workout added!');
       }
 
+      setFormOpen(false);
       return true;
     } catch (err) {
       setError(err.message || 'Failed to save workout.');
@@ -85,12 +87,27 @@ function App() {
   // --- Edit: populate form ---
   function handleEdit(workout) {
     setEditingWorkout(workout);
-    // Scroll to the form so the user can see it
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setFormOpen(true);
+
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }
+
+  function handleAddWorkout() {
+    if (formOpen) {
+      setFormOpen(false);
+      setEditingWorkout(null);
+    } else {
+      setEditingWorkout(null);
+      setFormOpen(true);
+    }
   }
 
   function handleCancelEdit() {
     setEditingWorkout(null);
+    setFormOpen(false);
   }
 
   // --- Success toast ---
@@ -109,7 +126,10 @@ function App() {
 
   return (
     <div className="app">
-      <Header />
+      <Header
+        onAddWorkout={handleAddWorkout}
+        formOpen={formOpen}
+      />
 
       <main className="main-content">
         {/* Success / Error banners */}
@@ -117,13 +137,15 @@ function App() {
         {error && <div className="banner banner--error">{error}</div>}
 
         {/* Workout Form (create + edit) */}
-        <section className="section">
-          <WorkoutForm
-            onSave={handleSave}
-            editingWorkout={editingWorkout}
-            onCancelEdit={handleCancelEdit}
-          />
-        </section>
+        {formOpen && (
+          <section className="section">
+            <WorkoutForm
+              onSave={handleSave}
+              editingWorkout={editingWorkout}
+              onCancelEdit={handleCancelEdit}
+            />
+          </section>
+        )}  
 
         {/* Filter bar + workout cards */}
         <section className="section">

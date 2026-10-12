@@ -1,41 +1,28 @@
 /* ============================================================
-   Hero / Header section
+   IronPlan Header
    ============================================================ */
 
 .hero {
-  background: var(--bg-surface);
+  background:
+    radial-gradient(circle at 50% -20%,
+      rgba(200, 255, 0, 0.12),
+      transparent 45%),
+    var(--bg-surface);
   border-bottom: 1px solid var(--border);
-  padding: 56px 24px 48px;
+  padding: 52px 24px 46px;
   text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-
-/* Subtle radial glow behind the hero */
-.hero::before {
-  content: '';
-  position: absolute;
-  top: -60px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 600px;
-  height: 300px;
-  background: radial-gradient(ellipse at center, var(--accent-glow) 0%, transparent 70%);
-  pointer-events: none;
 }
 
 .hero-inner {
-  position: relative;
-  max-width: 680px;
+  max-width: 720px;
   margin: 0 auto;
 }
 
-/* Logo mark */
 .hero-logo {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 24px;
+  margin-bottom: 22px;
 }
 
 .logo-mark {
@@ -44,67 +31,48 @@
   justify-content: center;
   width: 42px;
   height: 42px;
+  border-radius: 10px;
   background: var(--accent);
   color: #000;
+  font-size: 0.9rem;
   font-weight: 900;
-  font-size: 0.95rem;
-  border-radius: var(--radius-sm);
   letter-spacing: 0.5px;
 }
 
 .logo-text {
+  color: var(--text-primary);
   font-size: 1.5rem;
   font-weight: 800;
-  color: var(--text-primary);
   letter-spacing: -0.5px;
 }
 
-/* Title */
 .hero-title {
-  font-size: clamp(1.6rem, 4vw, 2.4rem);
-  font-weight: 800;
-  line-height: 1.2;
+  margin-bottom: 10px;
   color: var(--text-primary);
-  margin-bottom: 12px;
-  letter-spacing: -0.5px;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.8px;
 }
 
-/* Highlight "Own Your Gains" with the accent colour */
-.hero-title em {
-  font-style: normal;
-  color: var(--accent);
-}
-
-/* Subtitle */
 .hero-subtitle {
-  font-size: 1rem;
+  max-width: 520px;
+  margin: 0 auto 26px;
   color: var(--text-secondary);
-  margin-bottom: 28px;
-  max-width: 480px;
-  margin-left: auto;
-  margin-right: auto;
+  font-size: 1rem;
 }
 
-/* Tag pills */
-.hero-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
+.hero .btn--primary {
+  min-width: 160px;
+  padding: 11px 22px;
 }
 
-.hero-tag {
-  padding: 5px 14px;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  letter-spacing: 0.3px;
-}
-
-/* Responsive */
-@media (max-width: 480px) {
+@media (max-width: 600px) {
   .hero {
-    padding: 40px 16px 36px;
+    padding: 40px 18px 36px;
+  }
+
+  .hero-title {
+    font-size: 1.85rem;
   }
 }

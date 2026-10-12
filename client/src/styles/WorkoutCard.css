@@ -1,98 +1,86 @@
 /* ============================================================
-   Workout Card
+   Workout History Card
    ============================================================ */
 
 .workout-card {
-  background: var(--bg-card);
+  overflow: hidden;
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  background: var(--bg-card);
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
 }
 
 .workout-card:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow);
-  border-color: #333;
+  border-color: #383838;
 }
 
-/* ---- Accent strip at top ---- */
-.card-accent {
-  background: var(--accent);
-  height: 6px;
+.card-main {
+  display: grid;
+  grid-template-columns: 82px 1fr;
+  width: 100%;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+}
+
+.card-main:hover {
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.card-date {
   display: flex;
   align-items: center;
-  padding: 0 16px;
-  position: relative;
+  justify-content: center;
+  min-height: 118px;
+  border-right: 1px solid var(--border);
+  background: rgba(200, 255, 0, 0.035);
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  text-align: center;
+  text-transform: uppercase;
 }
 
-/* Day abbreviation badge sits on top of the accent strip */
-.card-day-short {
-  position: absolute;
-  right: 16px;
-  top: -1px;
-  background: var(--accent);
-  color: #000;
-  font-size: 0.65rem;
-  font-weight: 900;
-  letter-spacing: 1px;
-  padding: 2px 8px 3px;
-  border-radius: 0 0 6px 6px;
-}
-
-/* ---- Card Body ---- */
-.card-body {
-  padding: 18px 20px 14px;
-  flex: 1;
+.card-summary {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
+  padding: 18px 20px;
 }
 
 .card-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 10px;
+  gap: 16px;
 }
 
 .card-title {
-  font-size: 1rem;
-  font-weight: 700;
   color: var(--text-primary);
-  line-height: 1.3;
+  font-size: 1.05rem;
+  font-weight: 750;
 }
 
-/* ---- Difficulty Badges ---- */
-.badge {
-  display: inline-block;
-  padding: 3px 10px;
-  border-radius: 999px;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.4px;
-  white-space: nowrap;
+.difficulty-score {
   flex-shrink: 0;
+  padding: 3px 9px;
+  border: 1px solid rgba(200, 255, 0, 0.28);
+  border-radius: 999px;
+  background: var(--accent-glow);
+  color: var(--accent);
+  font-size: 0.74rem;
+  font-weight: 800;
 }
 
-.badge--beginner {
-  background: var(--beginner-bg);
-  color: var(--beginner-text);
+.card-time {
+  color: var(--text-muted);
+  font-size: 0.8rem;
 }
 
-.badge--intermediate {
-  background: var(--inter-bg);
-  color: var(--inter-text);
-}
-
-.badge--advanced {
-  background: var(--advanced-bg);
-  color: var(--advanced-text);
-}
-
-/* ---- Meta Pills (day, muscle group, sets×reps) ---- */
 .card-meta {
   display: flex;
   flex-wrap: wrap;
@@ -100,51 +88,114 @@
 }
 
 .meta-pill {
-  background: var(--bg-input);
+  padding: 3px 9px;
   border: 1px solid var(--border);
   border-radius: 999px;
-  padding: 3px 10px;
-  font-size: 0.76rem;
+  background: var(--bg-input);
   color: var(--text-secondary);
+  font-size: 0.72rem;
 }
 
-/* ---- Exercise Chips ---- */
-.card-exercises {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.exercise-chip {
-  background: rgba(200, 255, 0, 0.06);
-  border: 1px solid rgba(200, 255, 0, 0.2);
-  border-radius: var(--radius-sm);
-  padding: 3px 10px;
-  font-size: 0.78rem;
-  color: var(--accent);
-}
-
-/* ---- Notes ---- */
-.card-notes {
-  font-size: 0.82rem;
+.exercise-count {
   color: var(--text-muted);
-  font-style: italic;
-  line-height: 1.5;
+  font-size: 0.78rem;
+}
+
+/* Expanded area */
+
+.card-details {
+  padding: 4px 20px 18px 102px;
   border-top: 1px solid var(--border);
-  padding-top: 10px;
-  margin-top: 2px;
 }
 
-.notes-label {
-  font-style: normal;
-  font-weight: 600;
+.exercise-detail {
+  padding: 18px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.exercise-detail:last-of-type {
+  border-bottom: 0;
+}
+
+.exercise-detail h4 {
+  margin-bottom: 10px;
+  color: var(--text-primary);
+  font-size: 0.92rem;
+  font-weight: 750;
+}
+
+.set-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.set-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  max-width: 420px;
+  padding: 5px 0;
   color: var(--text-secondary);
+  font-size: 0.8rem;
 }
 
-/* ---- Actions ---- */
+.set-row span:first-child {
+  color: var(--text-muted);
+}
+
+.exercise-detail>p {
+  margin-top: 5px;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.card-notes {
+  font-style: italic;
+}
+
+.workout-notes {
+  margin-top: 18px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-surface);
+}
+
+.workout-notes strong {
+  color: var(--text-secondary);
+  font-size: 0.74rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.workout-notes p {
+  margin-top: 5px;
+  color: var(--text-muted);
+  font-size: 0.84rem;
+}
+
 .card-actions {
   display: flex;
   gap: 8px;
-  padding: 12px 20px 16px;
-  border-top: 1px solid var(--border);
+  margin-top: 18px;
+}
+
+@media (max-width: 600px) {
+  .card-main {
+    grid-template-columns: 66px 1fr;
+  }
+
+  .card-date {
+    min-height: 110px;
+  }
+
+  .card-summary {
+    padding: 15px;
+  }
+
+  .card-details {
+    padding: 2px 15px 16px;
+  }
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import '../styles/Header.css';
 
-function Header() {
+function Header({ onAddWorkout, formOpen }) {
   return (
     <header className="hero">
       <div className="hero-inner">
@@ -9,15 +9,20 @@ function Header() {
           <span className="logo-mark">IP</span>
           <span className="logo-text">IronPlan</span>
         </div>
-        <h1 className="hero-title">Plan Your Week. Own Your Gains.</h1>
+
+        <h1 className="hero-title">Track Your Training. See Your Progress.</h1>
+
         <p className="hero-subtitle">
-          Build your workout split, track your exercises, and stay consistent.
+          Log workouts, exercises, sets, and performance over time.
         </p>
-        <div className="hero-tags">
-          <span className="hero-tag">Full Body</span>
-          <span className="hero-tag">Push · Pull · Legs</span>
-          <span className="hero-tag">Track Your Split</span>
-        </div>
+
+        <button
+          type="button"
+          className="btn btn--primary"
+          onClick={onAddWorkout}
+        >
+          {formOpen ? 'Close Workout Form' : '+ Add Workout'}
+        </button>
       </div>
     </header>
   );
