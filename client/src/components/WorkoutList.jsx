@@ -72,38 +72,38 @@ function WorkoutList({
   const sortedWorkouts = sortWorkouts(workouts);
   const groupedWorkouts = groupWorkoutsByMonth(sortedWorkouts);
 
-return (
-  <div className="workout-history">
-    {groupedWorkouts.map((group) => (
-      <section
-        className="workout-month"
-        key={group.key}
-      >
-        <div className="workout-month-header">
-          <h3>{group.label}</h3>
+  return (
+    <div className="workout-history">
+      {groupedWorkouts.map((group) => (
+        <section
+          className="workout-month"
+          key={group.key}
+        >
+          <div className="workout-month-header">
+            <h3>{group.label}</h3>
 
-          <span>
-            {group.workouts.length}{' '}
-            {group.workouts.length === 1
-              ? 'workout'
-              : 'workouts'}
-          </span>
-        </div>
+            <span>
+              {group.workouts.length}{' '}
+              {group.workouts.length === 1
+                ? 'workout'
+                : 'workouts'}
+            </span>
+          </div>
 
-        <div className="workout-grid">
-          {group.workouts.map((workout) => (
-            <WorkoutCard
-              key={workout._id}
-              workout={workout}
-              onEdit={onEdit}
-              onDelete={onDelete}
-            />
-          ))}
-        </div>
-      </section>
-    ))}
-  </div>
-);
+          <div className="workout-grid">
+            {group.workouts.map((workout) => (
+              <WorkoutCard
+                key={workout._id}
+                workout={workout}
+                onEdit={onEdit}
+                onDelete={onDelete}
+              />
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+  );
 }
 
 export default WorkoutList;
