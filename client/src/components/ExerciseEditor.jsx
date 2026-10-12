@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 function ExerciseEditor({
     exercise,
     exerciseIndex,
     totalExercises,
+    expanded,
+    onToggle,
     onChange,
     onMoveUp,
     onMoveDown,
     onRemove,
 }) {
-    const [expanded, setExpanded] = useState(true);
 
     function handleExerciseChange(field, value) {
         onChange(exerciseIndex, {
@@ -59,7 +60,7 @@ function ExerciseEditor({
                 <button
                     type="button"
                     className="exercise-collapse-toggle"
-                    onClick={() => setExpanded((prev) => !prev)}
+                    onClick={onToggle}
                     aria-expanded={expanded}
                 >
                     <div className="exercise-header-text">

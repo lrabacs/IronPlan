@@ -61,6 +61,7 @@ function WorkoutForm({ onSave, editingWorkout, onCancelEdit }) {
   const [form, setForm] = useState(createEmptyForm);
   const [formError, setFormError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [expandedExerciseId, setExpandedExerciseId] = useState(null);
 
   useEffect(() => {
     if (!editingWorkout) {
@@ -143,10 +144,14 @@ function WorkoutForm({ onSave, editingWorkout, onCancelEdit }) {
   }
 
   function addExercise() {
+    const newExercise = createEmptyExercise();
+
     setForm((prev) => ({
       ...prev,
-      exercises: [...prev.exercises, createEmptyExercise()],
+      exercises: [...prev.exercises, newExercise],
     }));
+
+    setExpandedExerciseId(newExercise.clientId);
   }
 
   function removeExercise(index) {
@@ -513,10 +518,18 @@ function WorkoutForm({ onSave, editingWorkout, onCancelEdit }) {
 
           {form.exercises.map((exercise, index) => (
             <ExerciseEditor
-              key={index}
+              key={exercise.clientId}
               exercise={exercise}
               exerciseIndex={index}
               totalExercises={form.exercises.length}
+              expanded={expandedExerciseId === exercise.clientId}
+              onToggle={() =>
+                setExpandedExerciseId((currentId) =>
+                  currentId === exercise.clientId
+                    ? null
+                    : exercise.clientId
+                )
+              }
               onChange={handleExerciseChange}
               onMoveUp={moveExerciseUp}
               onMoveDown={moveExerciseDown}
