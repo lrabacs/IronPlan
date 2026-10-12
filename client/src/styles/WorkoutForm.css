@@ -336,11 +336,6 @@
   white-space: nowrap;
 }
 
-.exercise-name-preview--empty {
-  color: var(--text-muted);
-  font-weight: 500;
-}
-
 .exercise-header-summary {
   display: flex;
   align-items: center;

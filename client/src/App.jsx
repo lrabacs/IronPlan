@@ -19,10 +19,11 @@ function App() {
   const [editingWorkout, setEditingWorkout] = useState(null);
 
   // --- Filter state ---
-  const [filterDay, setFilterDay] = useState('');
+  const [search, setSearch] = useState('');
+  const [filterDate, setFilterDate] = useState('');
   const [filterMuscle, setFilterMuscle] = useState('');
-  const [filterDifficulty, setFilterDifficulty] = useState('');
-
+  const [filterDifficultyMin, setFilterDifficultyMin] = useState('');
+  const [filterDifficultyMax, setFilterDifficultyMax] = useState('');
   // --- Fetch workouts on mount ---
   useEffect(() => {
     fetchWorkouts();
@@ -117,10 +118,53 @@ function App() {
   }
 
   // --- Client-side filtering ---
-  const filtered = workouts.filter((w) => {
-    if (filterDay && w.day !== filterDay) return false;
-    if (filterMuscle && w.muscleGroup !== filterMuscle) return false;
-    if (filterDifficulty && w.difficulty !== filterDifficulty) return false;
+  const filtered = workouts.filter((workout) => {
+    const searchTerm = search.trim().toLowerCase();
+
+    if (searchTerm) {
+      const titleMatches = workout.title
+        .toLowerCase()
+        .includes(searchTerm);
+
+      const exerciseMatches = workout.exercises.some((exercise) =>
+        exercise.name
+          .toLowerCase()
+          .includes(searchTerm)
+      );
+
+      if (!titleMatches && !exerciseMatches) {
+        return false;
+      }
+    }
+
+    if (
+      filterDate &&
+      workout.date !== filterDate
+    ) {
+      return false;
+    }
+
+    if (
+      filterMuscle &&
+      !workout.muscleGroups.includes(filterMuscle)
+    ) {
+      return false;
+    }
+
+    if (
+      filterDifficultyMin !== '' &&
+      workout.difficulty < Number(filterDifficultyMin)
+    ) {
+      return false;
+    }
+
+    if (
+      filterDifficultyMax !== '' &&
+      workout.difficulty > Number(filterDifficultyMax)
+    ) {
+      return false;
+    }
+
     return true;
   });
 
@@ -145,7 +189,7 @@ function App() {
               onCancelEdit={handleCancelEdit}
             />
           </section>
-        )}  
+        )}
 
         {/* Filter bar + workout cards */}
         <section className="section">
@@ -157,13 +201,16 @@ function App() {
           </div>
 
           <FilterBar
-            workouts={workouts}
-            filterDay={filterDay}
+            search={search}
+            setSearch={setSearch}
+            filterDate={filterDate}
+            setFilterDate={setFilterDate}
             filterMuscle={filterMuscle}
-            filterDifficulty={filterDifficulty}
-            onFilterDay={setFilterDay}
-            onFilterMuscle={setFilterMuscle}
-            onFilterDifficulty={setFilterDifficulty}
+            setFilterMuscle={setFilterMuscle}
+            filterDifficultyMin={filterDifficultyMin}
+            setFilterDifficultyMin={setFilterDifficultyMin}
+            filterDifficultyMax={filterDifficultyMax}
+            setFilterDifficultyMax={setFilterDifficultyMax}
           />
 
           <WorkoutList

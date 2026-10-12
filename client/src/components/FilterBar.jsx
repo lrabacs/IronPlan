@@ -1,75 +1,153 @@
 import React from 'react';
 import '../styles/FilterBar.css';
 
-const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-const DIFFICULTIES = ['Beginner', 'Intermediate', 'Advanced'];
+const MUSCLE_GROUPS = [
+  'Chest',
+  'Back',
+  'Shoulders',
+  'Biceps',
+  'Triceps',
+  'Legs',
+  'Abs',
+  'Cardio',
+  'Plyometrics',
+  'Full Body',
+];
+
+const DIFFICULTIES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 function FilterBar({
-  workouts,
-  filterDay,
+  search,
+  setSearch,
+  filterDate,
+  setFilterDate,
   filterMuscle,
-  filterDifficulty,
-  onFilterDay,
-  onFilterMuscle,
-  onFilterDifficulty,
+  setFilterMuscle,
+  filterDifficultyMin,
+  setFilterDifficultyMin,
+  filterDifficultyMax,
+  setFilterDifficultyMax,
 }) {
-  // Derive unique muscle groups from existing workouts for the filter dropdown
-  const muscleGroups = [...new Set(workouts.map((w) => w.muscleGroup))].sort();
+  const hasFilters =
+    search ||
+    filterDate ||
+    filterMuscle ||
+    filterDifficultyMin !== '' ||
+    filterDifficultyMax !== '';
 
-  const hasActiveFilter = filterDay || filterMuscle || filterDifficulty;
-
-  function clearAll() {
-    onFilterDay('');
-    onFilterMuscle('');
-    onFilterDifficulty('');
+  function clearFilters() {
+    setSearch('');
+    setFilterDate('');
+    setFilterMuscle('');
+    setFilterDifficultyMin('');
+    setFilterDifficultyMax('');
   }
 
   return (
-    <div className="filter-bar">
-      <div className="filter-controls">
-        {/* Day filter */}
-        <select
-          className="filter-select"
-          value={filterDay}
-          onChange={(e) => onFilterDay(e.target.value)}
-          aria-label="Filter by day"
-        >
-          <option value="">All Days</option>
-          {DAYS.map((d) => (
-            <option key={d} value={d}>{d}</option>
-          ))}
-        </select>
+    <div className="filter-panel">
+      <div className="filter-field filter-field--search">
+        <label htmlFor="filter-search">
+          Search
+        </label>
 
-        {/* Muscle group filter — built from real data */}
+        <input
+          id="filter-search"
+          type="text"
+          placeholder="Workout or exercise..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
+
+      <div className="filter-field">
+        <label htmlFor="filter-date">
+          Date Performed
+        </label>
+
+        <input
+          id="filter-date"
+          type="date"
+          value={filterDate}
+          onChange={(e) => setFilterDate(e.target.value)}
+        />
+      </div>
+
+      <div className="filter-field">
+        <label htmlFor="filter-muscle">
+          Muscle Group
+        </label>
+
         <select
-          className="filter-select"
+          id="filter-muscle"
           value={filterMuscle}
-          onChange={(e) => onFilterMuscle(e.target.value)}
-          aria-label="Filter by muscle group"
+          onChange={(e) => setFilterMuscle(e.target.value)}
         >
-          <option value="">All Muscle Groups</option>
-          {muscleGroups.map((m) => (
-            <option key={m} value={m}>{m}</option>
+          <option value="">All Groups</option>
+
+          {MUSCLE_GROUPS.map((group) => (
+            <option key={group} value={group}>
+              {group}
+            </option>
           ))}
         </select>
+      </div>
 
-        {/* Difficulty filter */}
-        <select
-          className="filter-select"
-          value={filterDifficulty}
-          onChange={(e) => onFilterDifficulty(e.target.value)}
-          aria-label="Filter by difficulty"
-        >
-          <option value="">All Difficulties</option>
-          {DIFFICULTIES.map((d) => (
-            <option key={d} value={d}>{d}</option>
-          ))}
-        </select>
+      <div className="filter-field filter-field--difficulty">
+        <label>
+          Difficulty
+        </label>
 
-        {/* Clear filters button — only shown when a filter is active */}
-        {hasActiveFilter && (
-          <button className="btn btn--ghost btn--sm" onClick={clearAll}>
-            Clear Filters ✕
+        <div className="difficulty-filter">
+          <select
+            value={filterDifficultyMin}
+            onChange={(e) =>
+              setFilterDifficultyMin(e.target.value)
+            }
+            aria-label="Minimum difficulty"
+          >
+            <option value="">Min</option>
+
+            {DIFFICULTIES.map((difficulty) => (
+              <option
+                key={difficulty}
+                value={difficulty}
+              >
+                {difficulty}
+              </option>
+            ))}
+          </select>
+
+          <span>to</span>
+
+          <select
+            value={filterDifficultyMax}
+            onChange={(e) =>
+              setFilterDifficultyMax(e.target.value)
+            }
+            aria-label="Maximum difficulty"
+          >
+            <option value="">Max</option>
+
+            {DIFFICULTIES.map((difficulty) => (
+              <option
+                key={difficulty}
+                value={difficulty}
+              >
+                {difficulty}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <div className="filter-clear-wrapper">
+        {hasFilters && (
+          <button
+            type="button"
+            className="filter-clear"
+            onClick={clearFilters}
+          >
+            Clear
           </button>
         )}
       </div>
