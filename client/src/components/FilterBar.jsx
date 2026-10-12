@@ -1,20 +1,9 @@
 import React from 'react';
 import '../styles/FilterBar.css';
-
-const MUSCLE_GROUPS = [
-  'Chest',
-  'Back',
-  'Shoulders',
-  'Biceps',
-  'Triceps',
-  'Legs',
-  'Abs',
-  'Cardio',
-  'Plyometrics',
-  'Full Body',
-];
-
-const DIFFICULTIES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+import {
+  MUSCLE_GROUPS,
+  DIFFICULTIES,
+} from '../constants/workoutOptions.js';
 
 function FilterBar({
   search,
@@ -111,6 +100,10 @@ function FilterBar({
               <option
                 key={difficulty}
                 value={difficulty}
+                disabled={
+                  filterDifficultyMax !== '' &&
+                  difficulty > Number(filterDifficultyMax)
+                }
               >
                 {difficulty}
               </option>
@@ -132,6 +125,10 @@ function FilterBar({
               <option
                 key={difficulty}
                 value={difficulty}
+                disabled={
+                  filterDifficultyMin !== '' &&
+                  difficulty < Number(filterDifficultyMin)
+                }
               >
                 {difficulty}
               </option>

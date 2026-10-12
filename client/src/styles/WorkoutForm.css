@@ -151,17 +151,10 @@
 .difficulty-value {
   margin-bottom: 12px;
   color: var(--accent);
-  font-size: 1.15rem;
-  font-weight: 800;
-  text-align: center;
-}
-
-.difficulty-value {
-  color: #d7ff45;
-  font-weight: 800;
   font-size: 1.9rem;
+  font-weight: 800;
   line-height: 1;
-  allign-items: center;
+  text-align: center;
 }
 
 .difficulty-slider {

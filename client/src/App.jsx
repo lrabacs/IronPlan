@@ -1,32 +1,43 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Header from './components/Header.jsx';
 import WorkoutForm from './components/WorkoutForm.jsx';
 import FilterBar from './components/FilterBar.jsx';
 import WorkoutList from './components/WorkoutList.jsx';
-import { getAllWorkouts, createWorkout, updateWorkout, deleteWorkout } from './api/workouts.js';
+import {
+  getAllWorkouts,
+  createWorkout,
+  updateWorkout,
+  deleteWorkout
+} from './api/workouts.js';
 import './styles/App.css';
 
 function App() {
-  // --- Data state ---
   const [workouts, setWorkouts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [successMsg, setSuccessMsg] = useState('');
   const [formOpen, setFormOpen] = useState(false);
 
-  // --- Edit state ---
-  // When editingWorkout is set, the form switches to edit mode
+  const successTimeoutRef = useRef(null);
+
   const [editingWorkout, setEditingWorkout] = useState(null);
 
-  // --- Filter state ---
   const [search, setSearch] = useState('');
   const [filterDate, setFilterDate] = useState('');
   const [filterMuscle, setFilterMuscle] = useState('');
   const [filterDifficultyMin, setFilterDifficultyMin] = useState('');
   const [filterDifficultyMax, setFilterDifficultyMax] = useState('');
-  // --- Fetch workouts on mount ---
+
   useEffect(() => {
     fetchWorkouts();
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (successTimeoutRef.current) {
+        clearTimeout(successTimeoutRef.current);
+      }
+    };
   }, []);
 
   async function fetchWorkouts() {
@@ -42,7 +53,6 @@ function App() {
     }
   }
 
-  // --- Create or Update ---
   async function handleSave(formData) {
     setError(null);
 
@@ -72,7 +82,6 @@ function App() {
     }
   }
 
-  // --- Delete ---
   async function handleDelete(id) {
     if (!window.confirm('Delete this workout? This cannot be undone.')) return;
     setError(null);
@@ -85,7 +94,6 @@ function App() {
     }
   }
 
-  // --- Edit: populate form ---
   function handleEdit(workout) {
     setEditingWorkout(workout);
     setFormOpen(true);
@@ -111,13 +119,19 @@ function App() {
     setFormOpen(false);
   }
 
-  // --- Success toast ---
-  function showSuccess(msg) {
-    setSuccessMsg(msg);
-    setTimeout(() => setSuccessMsg(''), 3000);
+  function showSuccess(message) {
+    setSuccessMsg(message);
+
+    if (successTimeoutRef.current) {
+      clearTimeout(successTimeoutRef.current);
+    }
+
+    successTimeoutRef.current = setTimeout(() => {
+      setSuccessMsg('');
+      successTimeoutRef.current = null;
+    }, 3000);
   }
 
-  // --- Client-side filtering ---
   const filtered = workouts.filter((workout) => {
     const searchTerm = search.trim().toLowerCase();
 
@@ -176,11 +190,9 @@ function App() {
       />
 
       <main className="main-content">
-        {/* Success / Error banners */}
         {successMsg && <div className="banner banner--success">{successMsg}</div>}
         {error && <div className="banner banner--error">{error}</div>}
 
-        {/* Workout Form (create + edit) */}
         {formOpen && (
           <section className="section">
             <WorkoutForm
@@ -191,7 +203,6 @@ function App() {
           </section>
         )}
 
-        {/* Filter bar + workout cards */}
         <section className="section">
           <div className="list-header">
             <h2 className="section-title">Your Workouts</h2>
@@ -215,6 +226,7 @@ function App() {
 
           <WorkoutList
             workouts={filtered}
+            hasWorkouts={workouts.length > 0}
             loading={loading}
             onEdit={handleEdit}
             onDelete={handleDelete}
@@ -223,7 +235,7 @@ function App() {
       </main>
 
       <footer className="footer">
-        <p>IronPlan &mdash; Plan your week. Own your gains.</p>
+        <p>IronPlan &mdash; Track your training. See your progress.</p>
       </footer>
     </div>
   );

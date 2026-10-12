@@ -338,4 +338,51 @@ describe('Workout API', () => {
         expect(response.body[0].title).toBe('Newer Workout');
         expect(response.body[1].title).toBe('Older Workout');
     });
+
+    test('POST /api/workouts returns 400 for an invalid calendar date', async () => {
+        const response = await request(app)
+            .post('/api/workouts')
+            .send(makeWorkout({
+                date: '2026-02-31'
+            }));
+
+        expect(response.statusCode).toBe(400);
+    });
+
+    test('POST /api/workouts returns 400 with no muscle groups', async () => {
+        const response = await request(app)
+            .post('/api/workouts')
+            .send(makeWorkout({
+                muscleGroups: []
+            }));
+
+        expect(response.statusCode).toBe(400);
+    });
+
+    test('POST /api/workouts allows a bodyweight set with no weight', async () => {
+        const response = await request(app)
+            .post('/api/workouts')
+            .send(makeWorkout({
+                title: 'Bodyweight Workout',
+                exercises: [
+                    {
+                        name: 'Push-Ups',
+                        sets: [
+                            {
+                                reps: 20,
+                                weight: null,
+                                weightUnit: 'lb'
+                            }
+                        ],
+                        restTime: 60,
+                        restUnit: 'seconds',
+                        notes: ''
+                    }
+                ]
+            }));
+
+        expect(response.statusCode).toBe(201);
+        expect(response.body.exercises[0].sets[0].weight).toBeNull();
+        expect(response.body.exercises[0].sets[0].reps).toBe(20);
+    });
 });

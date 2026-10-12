@@ -13,6 +13,26 @@ const MUSCLE_GROUPS = [
   'Full Body'
 ];
 
+function isValidDateString(value) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    return false;
+  }
+
+  const [year, month, day] = value
+    .split('-')
+    .map(Number);
+
+  const date = new Date(
+    Date.UTC(year, month - 1, day)
+  );
+
+  return (
+    date.getUTCFullYear() === year &&
+    date.getUTCMonth() === month - 1 &&
+    date.getUTCDate() === day
+  );
+}
+
 const setSchema = new mongoose.Schema({
   reps: {
     type: Number,
@@ -40,7 +60,8 @@ const exerciseSchema = new mongoose.Schema({
   sets: {
     type: [setSchema],
     validate: {
-      validator: (sets) => sets.length > 0,
+      validator: (sets) =>
+        Array.isArray(sets) && sets.length > 0,
       message: 'Each exercise must have at least one set'
     }
   },
@@ -71,10 +92,10 @@ const workoutSchema = new mongoose.Schema(
     date: {
       type: String,
       required: [true, 'Workout date is required'],
-      match: [
-        /^\d{4}-\d{2}-\d{2}$/,
-        'Workout date must use YYYY-MM-DD format'
-      ]
+      validate: {
+        validator: isValidDateString,
+        message: 'Workout date must be a valid YYYY-MM-DD date'
+      }
     },
     startTime: {
       type: String,
@@ -101,14 +122,16 @@ const workoutSchema = new mongoose.Schema(
         enum: MUSCLE_GROUPS
       }],
       validate: {
-        validator: (groups) => groups.length > 0,
+        validator: (groups) =>
+          Array.isArray(groups) && groups.length > 0,
         message: 'Select at least one muscle group'
       }
     },
     exercises: {
       type: [exerciseSchema],
       validate: {
-        validator: (exercises) => exercises.length > 0,
+        validator: (exercises) =>
+          Array.isArray(exercises) && exercises.length > 0,
         message: 'Add at least one exercise'
       }
     },

@@ -9,12 +9,6 @@
   border-radius: var(--radius-lg);
 }
 
-.empty-icon {
-  font-size: 3rem;
-  margin-bottom: 16px;
-  display: block;
-}
-
 .empty-title {
   font-size: 1.1rem;
   font-weight: 700;

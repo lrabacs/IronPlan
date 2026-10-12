@@ -1,19 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import ExerciseEditor from './ExerciseEditor.jsx';
 import '../styles/WorkoutForm.css';
-
-const MUSCLE_GROUPS = [
-  'Chest',
-  'Back',
-  'Shoulders',
-  'Biceps',
-  'Triceps',
-  'Legs',
-  'Abs',
-  'Cardio',
-  'Plyometrics',
-  'Full Body',
-];
+import { MUSCLE_GROUPS } from '../constants/workoutOptions.js';
 
 function getTodayString() {
   const now = new Date();
@@ -493,6 +481,7 @@ function WorkoutForm({ onSave, editingWorkout, onCancelEdit }) {
                       ? 'muscle-option muscle-option--selected'
                       : 'muscle-option'
                   }
+                  aria-pressed={selected}
                   onClick={() =>
                     toggleMuscleGroup(group)
                   }
